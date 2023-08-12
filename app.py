@@ -20,7 +20,7 @@ def index():
 
     user_id = session['user_id']
     user = User.query.get(user_id)
-    collections = user.collections.all()
+    collections = user.collections.order_by(Collection.created_at.desc()).all()
 
     for collection in collections:
         collection.created_at = get_local_time(collection.created_at)
@@ -85,6 +85,7 @@ def start_task(task_id):
     task = Task.query.get(task_id)
     if task:
         task.start()
+        db.session.commit()
         return redirect(url_for('index'))
     else:
         flash('Invalid task ID.')
@@ -96,6 +97,7 @@ def pause_task(task_id):
     task = Task.query.get(task_id)
     if task:
         task.pause()
+        db.session.commit()
         return redirect(url_for('index'))
     else:
         flash('Invalid task ID.')
@@ -107,6 +109,7 @@ def complete_task(task_id):
     task = Task.query.get(task_id)
     if task:
         task.complete()
+        db.session.commit()
         return redirect(url_for('index'))
     else:
         flash('Invalid task ID.')

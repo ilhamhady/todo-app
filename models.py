@@ -43,13 +43,11 @@ class Task(db.Model):
         if self.status in ['not started', 'paused']:
             self.status = 'in progress'
             self.last_start_time = datetime.utcnow()
-            db.session.commit()
 
     def pause(self):
         if self.status == 'in progress':
             self.status = 'paused'
             self.spent_time += (datetime.utcnow() - self.last_start_time).total_seconds()
-            db.session.commit()
 
     def complete(self):
         if self.status in ['completed', 'not started']:
@@ -58,16 +56,17 @@ class Task(db.Model):
             self.spent_time += (datetime.utcnow() - self.last_start_time).total_seconds()
         self.status = 'completed'
         self.end_time = datetime.utcnow()
-        db.session.commit()
 
     def get_spent_time(self):
         total_seconds = int(self.spent_time)
         hours, remainder = divmod(total_seconds, 3600)
         minutes, seconds = divmod(remainder, 60)
 
+        parts = []
         if hours > 0:
-            return f"{hours} hr, {minutes} min, {seconds} sec"
-        elif minutes > 0:
-            return f"{minutes} min, {seconds} sec"
-        else:
-            return f"{seconds} sec"
+            parts.append(f"{hours} hr")
+        if minutes > 0:
+            parts.append(f"{minutes} min")
+        parts.append(f"{seconds} sec")
+
+        return ", ".join(parts)
