@@ -16,7 +16,6 @@ lib64/
 parts/
 sdist/
 var/
-include/
 *.egg-info/
 .installed.cfg
 *.egg
@@ -53,6 +52,7 @@ docs/_build/
 
 # Folders
 instance/
+venv/
 
 #files
 .DS_Store
