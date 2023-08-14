@@ -58,6 +58,7 @@ venv/
 #files
 .DS_Store
 .keep
+extract.sh
 extract_tables.py
 show_tables.py
 *.csv
