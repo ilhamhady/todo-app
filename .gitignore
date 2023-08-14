@@ -53,6 +53,7 @@ docs/_build/
 # Folders
 instance/
 venv/
+.nova/
 
 #files
 .DS_Store

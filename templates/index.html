@@ -83,10 +83,14 @@
           {% for task in collection.tasks %}
           <div class="flex flex-col gap-2 my-2">
             <div>
-              <p class="text-lg text-medium capitalize my-2">{{ task.title }}</p>
+              <p class="text-lg text-medium capitalize my-2">
+                {{ task.title }}
+              </p>
               <div class="flex justify-between">
                 <p class="text-xs text-gray">
-                  Time Spent: {{ task.get_spent_time() }}
+                  {% if task.status == 'in progress' %} Run Time:
+                  <span id="task-{{ task.id }}-time">00:00:00</span>
+                  {% else %} Time Spent: {{ task.get_spent_time() }} {% endif %}
                 </p>
                 <p class="text-xs text-gray">Status: {{ task.status }}</p>
               </div>
@@ -145,7 +149,7 @@
             <!-- prettier-ignore -->
             <button
               class="collection-toggle text-white flex justify-center items-center w-8 h-8 rounded-full"
-              {% if collection.enabled %}style="background-color: #fde047"{% else %} style="background-color: #d1d5db"{% endif %}
+              {% if collection.enabled %}style="background-color: #fde047"{% else %}style="background-color: #d1d5db"{% endif %}
               data-collection-id="{{ collection.id }}">
               <span class="material-symbols-outlined" style="font-size: 1.25rem"
                 >emoji_objects</span
@@ -241,6 +245,23 @@
             });
           });
         });
+    </script>
+    <!-- prettier-ignore -->
+    <script>
+      var inProgressTasksJSON = '{{ in_progress_tasks_json|safe }}';
+      var inProgressTasks = JSON.parse(inProgressTasksJSON);
+
+      setInterval(function() {
+        var now = new Date();
+        inProgressTasks.forEach(function(task) {
+          var startTime = new Date(task.start_time);
+          var elapsedSeconds = Math.floor((now - startTime) / 1000) + task.pause_time;
+          var hours = String(Math.floor(elapsedSeconds / 3600)).padStart(2, '0');
+          var minutes = String(Math.floor((elapsedSeconds % 3600) / 60)).padStart(2, '0');
+          var seconds = String(elapsedSeconds % 60).padStart(2, '0');
+          document.getElementById("task-" + task.id + "-time").textContent = hours + ":" + minutes + ":" + seconds;
+        });
+      }, 1000);
     </script>
   </body>
 </html>

@@ -33,27 +33,28 @@ class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(64), nullable=False)
     start_time = db.Column(db.DateTime)
-    last_start_time = db.Column(db.DateTime)
     end_time = db.Column(db.DateTime)
     status = db.Column(db.String(64), default='not started')
     spent_time = db.Column(db.Integer, default=0)
+    pause_time = db.Column(db.Integer, default=0)
     collection_id = db.Column(db.Integer, db.ForeignKey('collection.id'))
 
     def start(self):
         if self.status in ['not started', 'paused']:
             self.status = 'in progress'
-            self.last_start_time = datetime.utcnow()
+            self.start_time = datetime.utcnow()
 
     def pause(self):
         if self.status == 'in progress':
             self.status = 'paused'
-            self.spent_time += (datetime.utcnow() - self.last_start_time).total_seconds()
+            self.spent_time += (datetime.utcnow() - self.start_time).total_seconds()
+            self.pause_time = int(self.spent_time)
 
     def complete(self):
         if self.status in ['completed', 'not started']:
             return
         if self.status == 'in progress':
-            self.spent_time += (datetime.utcnow() - self.last_start_time).total_seconds()
+            self.spent_time += (datetime.utcnow() - self.start_time).total_seconds()
         self.status = 'completed'
         self.end_time = datetime.utcnow()
 
@@ -62,11 +63,4 @@ class Task(db.Model):
         hours, remainder = divmod(total_seconds, 3600)
         minutes, seconds = divmod(remainder, 60)
 
-        parts = []
-        if hours > 0:
-            parts.append(f"{hours} hr")
-        if minutes > 0:
-            parts.append(f"{minutes} min")
-        parts.append(f"{seconds} sec")
-
-        return ", ".join(parts)
+        return f"{hours:02}:{minutes:02}:{seconds:02}"
