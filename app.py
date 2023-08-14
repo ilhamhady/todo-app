@@ -50,11 +50,14 @@ def index():
     # Convert the list to JSON
     in_progress_tasks_json = json.dumps(in_progress_tasks)
 
-    return render_template('index.html', collections=collections,
-                           username=user.username,
-                           popup_closed=session.get('popup_closed', False),
-                           to_isoformat=to_isoformat,
-                           in_progress_tasks_json=in_progress_tasks_json)
+    return render_template(
+        'index.html',
+        collections=collections,
+        username=user.username,
+        popup_closed=session.get('popup_closed', False),
+        to_isoformat=to_isoformat,
+        in_progress_tasks_json=in_progress_tasks_json
+    )
 
 
 @app.route('/collection', methods=['POST'])
