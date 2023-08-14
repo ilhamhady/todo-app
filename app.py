@@ -1,4 +1,9 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import (
+    Flask,
+    render_template,
+    request, redirect,
+    url_for, session, flash
+)
 from models import db, Task, Collection, User
 from datetime import timedelta, timezone
 import os
@@ -29,7 +34,8 @@ def index():
     user = User.query.get(user_id)
     collections = user.collections.order_by(Collection.created_at.desc()).all()
 
-    in_progress_tasks = []  # Create a list to hold tasks with status "in progress"
+    # Create a list to hold tasks with status "in progress"
+    in_progress_tasks = []
     for collection in collections:
         collection.created_at = get_local_time(collection.created_at)
         for task in collection.tasks:
@@ -41,12 +47,14 @@ def index():
                 }
                 in_progress_tasks.append(task_info)
 
-    in_progress_tasks_json = json.dumps(in_progress_tasks)  # Convert the list to JSON
+    # Convert the list to JSON
+    in_progress_tasks_json = json.dumps(in_progress_tasks)
 
-    return render_template('index.html', collections=collections, username=user.username, 
-                            popup_closed=session.get('popup_closed', False), 
-                            to_isoformat=to_isoformat, in_progress_tasks_json=in_progress_tasks_json)
-
+    return render_template('index.html', collections=collections,
+                           username=user.username,
+                           popup_closed=session.get('popup_closed', False),
+                           to_isoformat=to_isoformat,
+                           in_progress_tasks_json=in_progress_tasks_json)
 
 
 @app.route('/collection', methods=['POST'])
@@ -74,7 +82,10 @@ def create_task(collection_id):
 
     collection = user.collections.filter_by(id=collection_id).first()
     if not collection:
-        flash('Invalid collection ID or you do not have permission to access this collection.')
+        flash(
+            'Invalid collection ID or you do not have permission to '
+            'access this collection.'
+        )
         return redirect(url_for('index'))
 
     title = request.form.get('title')

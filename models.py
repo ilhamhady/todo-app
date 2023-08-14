@@ -47,14 +47,20 @@ class Task(db.Model):
     def pause(self):
         if self.status == 'in progress':
             self.status = 'paused'
-            self.spent_time += (datetime.utcnow() - self.start_time).total_seconds()
+            self.spent_time += (
+                (datetime.utcnow() - self.start_time)
+                .total_seconds()
+            )
             self.pause_time = int(self.spent_time)
 
     def complete(self):
         if self.status in ['completed', 'not started']:
             return
         if self.status == 'in progress':
-            self.spent_time += (datetime.utcnow() - self.start_time).total_seconds()
+            self.spent_time += (
+                (datetime.utcnow() - self.start_time)
+                .total_seconds()
+            )
         self.status = 'completed'
         self.end_time = datetime.utcnow()
 
