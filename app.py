@@ -1,7 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from models import db, Task, Collection, User
-from datetime import timedelta
+from datetime import timedelta, timezone
 import os
+import json
 
 app = Flask(__name__, template_folder='templates')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///todo.db'
@@ -13,6 +14,12 @@ with app.app_context():
     db.create_all()
 
 
+def to_isoformat(dt):
+    if dt:
+        return dt.replace(tzinfo=timezone.utc).isoformat()
+    return None
+
+
 @app.route('/')
 def index():
     if 'user_id' not in session:
@@ -22,10 +29,24 @@ def index():
     user = User.query.get(user_id)
     collections = user.collections.order_by(Collection.created_at.desc()).all()
 
+    in_progress_tasks = []  # Create a list to hold tasks with status "in progress"
     for collection in collections:
         collection.created_at = get_local_time(collection.created_at)
+        for task in collection.tasks:
+            if task.status == 'in progress':
+                task_info = {
+                    'id': task.id,
+                    'start_time': to_isoformat(task.start_time),
+                    'pause_time': task.pause_time
+                }
+                in_progress_tasks.append(task_info)
 
-    return render_template('index.html', collections=collections, username=user.username, popup_closed=session.get('popup_closed', False))
+    in_progress_tasks_json = json.dumps(in_progress_tasks)  # Convert the list to JSON
+
+    return render_template('index.html', collections=collections, username=user.username, 
+                            popup_closed=session.get('popup_closed', False), 
+                            to_isoformat=to_isoformat, in_progress_tasks_json=in_progress_tasks_json)
+
 
 
 @app.route('/collection', methods=['POST'])
