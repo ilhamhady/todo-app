@@ -1,5 +1,7 @@
 # Todo App
 
+---
+
 ## Requirement
 
 This app is built based on Python 3 so you only need to make sure you did a Python installation and make sure what Python version is installed on your machine by running this terminal command
@@ -18,9 +20,17 @@ python3 --version
 
 To run this app on your local machine, run this command `bash run.sh`
 
-If somehow you get an error you can check `run.sh` file.
+open the app on your browser at `http:\\localhost:5001`
 
-You can modify the commands on that file only by changing `python3` and `pip` to the Python and pip versions on your local machine.
+1. If somehow you get an error related to python and pip you can check `run.sh` file
+
+   - Modify the commands on `run.sh` by changing `python3` and `pip` to the Python and pip versions on your local machine.
+
+2. If you get an error related to PORT you can check `run.sh` file
+
+   - Modify the commands on `run.sh` by changing `--port=5001` to `--port=YOUR_PORT`
+
+---
 
 ## Core classes, functions, and methods
 
