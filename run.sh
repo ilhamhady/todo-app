@@ -4,4 +4,4 @@ source venv/bin/activate
 pip install -r requirements.txt
 
 # b) Run all necessary parts of the codebase
-FLASK_APP=app.py flask run
+FLASK_APP=app.py flask run --host=0.0.0.0 --port=5001
