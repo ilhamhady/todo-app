@@ -6,13 +6,13 @@
 
 This app is built based on Python 3 so you only need to make sure you did a Python installation and make sure what Python version is installed on your machine by running this terminal command
 
-```bash
+```shell
 which python3
 ```
 
 or
 
-```bash
+```shell
 python3 --version
 ```
 
