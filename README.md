@@ -6,13 +6,13 @@
 
 This app is built based on Python 3 so you only need to make sure you did a Python installation and make sure what Python version is installed on your machine by running this terminal command
 
-```
+```bash
 which python3
 ```
 
 or
 
-```
+```bash
 python3 --version
 ```
 
@@ -73,7 +73,7 @@ In the code, there are several core classes, functions, and methods:
 
 1. **Route Handlers**
 
-   - `index()`: Renders the main page of the application.
+   - `index()`: Renders the main page of the application and create a temporary JSON task list with status "in progress".
    - `create_collection()`: Creates a new task collection.
    - `create_task(collection_id)`: Creates a new task in a specific collection.
    - `toggle_collection(collection_id)`: Toggles the 'enabled' status of a specific collection.
