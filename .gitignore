@@ -54,6 +54,7 @@ docs/_build/
 instance/
 venv/
 .nova/
+.idea/
 
 #files
 .DS_Store

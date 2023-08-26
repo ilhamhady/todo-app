@@ -61,14 +61,14 @@
         {% for collection in collections %}
         <div
           class="relative flex flex-col bg-white rounded-md shadow-md p-5 border border-gray-200">
-          <h2 class="text-2xl capitalize">{{ collection.name }}</h2>
+          <h2 class="text-2xl mt-5 capitalize">{{ collection.name }}</h2>
 
           <!-- prettier-ignore -->
           <form
             action="/collection/{{ collection.id }}/task"
             method="post"
             class="flex relative py-2 px-3 my-5 border border-blue-500 rounded-full"
-            {% if not collection.enabled %}style="display: none"{% endif %}>
+            style="display: {{ 'none' if not collection.enabled }}">
             <input
               type="text"
               name="title"
@@ -98,7 +98,8 @@
               </div>
             </div>
             <!-- prettier-ignore -->
-            <div class="flex items-center collection-{{ collection.id }}-tasks" {% if not collection.enabled %}style="display: none"{% endif %}>
+            <div class="flex items-center collection-{{ collection.id }}-tasks"
+                 style="display: {{ 'none' if not collection.enabled }}">
               {% if task.status == 'not started' or task.status == 'paused' %}
               <form action="/task/{{ task.id }}/start" method="post">
                 <button
@@ -158,7 +159,7 @@
             <!-- prettier-ignore -->
             <button
               class="collection-toggle text-white flex justify-center items-center w-8 h-8 rounded-full"
-              {% if collection.enabled %}style="background-color: #fde047"{% else %}style="background-color: #d1d5db"{% endif %}
+              style="background-color: {{ '#fde047' if collection.enabled else '#d1d5db' }}"
               data-collection-id="{{ collection.id }}">
               <span class="material-symbols-outlined" style="font-size: 1.25rem"
                 >emoji_objects</span
@@ -188,7 +189,7 @@
     <div
       id="popup"
       class="fixed max-sm-bottom-0 sm:top-0 left-0 m-4 bg-white border border-gray-300 rounded shadow-lg p-4 max-w-sm"
-      {% if popup_closed %}style="display: none"{% endif %}>
+      style="display: {{ 'none' if popup_closed else 'block' }}">
       <button
         id="close-button"
         class="absolute top-2 right-2 bg-red-500 text-white flex justify-center items-center w-5 h-5 rounded-full">
