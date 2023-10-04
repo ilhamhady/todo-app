@@ -98,8 +98,9 @@
               </div>
             </div>
             <!-- prettier-ignore -->
-            <div class="flex items-center collection-{{ collection.id }}-tasks"
-                 style="display: {{ 'none' if not collection.enabled }}">
+            <div 
+              class="flex items-center collection-{{ collection.id }}-tasks"
+              style="display: {{ 'none' if not collection.enabled }}">
               {% if task.status == 'not started' or task.status == 'paused' %}
               <form action="/task/{{ task.id }}/start" method="post">
                 <button
