@@ -14,6 +14,7 @@
       @media (max-width: 640px) {
         .max-sm-bottom-0 {
           bottom: 0;
+          max-height: fit-content;
         }
       }
     </style>
@@ -34,7 +35,12 @@
 
       {% if 'user_id' in session %}
       <div class="absolute top-5 right-5">
-        <a href="/signout" class="bg-red-500 text-white py-2 px-4 rounded">
+        <a
+          href="/signout"
+          class="bg-red-500 text-white text-sm py-1 px-2 rounded flex gap-1 items-center">
+          <span class="material-symbols-outlined" style="font-size: 20px"
+            >logout</span
+          >
           Logout
         </a>
       </div>
