@@ -17,6 +17,10 @@
           max-height: fit-content;
         }
       }
+      .task-input {
+        background-color: #e7f0fe;
+        padding-right: 89px;
+      }
     </style>
     <script>
       function confirmDelete() {
@@ -26,8 +30,10 @@
   </head>
   <body class="bg-gray-100">
     <div class="container mx-auto px-4 py-8">
-      <h1 class="text-center text-4xl my-5">Todo App</h1>
-      <p class="text-center font-semibold">
+      <h1 class="text-center text-4xl my-8">Todo App</h1>
+      <p
+        class="welcome-text text-center font-semibold -mt-5"
+        style="display: {{ 'block' if popup_closed else 'none' }}">
         Welcome,
         <span class="text-blue-500 capitalize italic">{{ username }}</span>
         👋
@@ -79,8 +85,7 @@
               type="text"
               name="title"
               placeholder="New task"
-              class="border-none py-2 px-3 w-full rounded-full focus:outline-none"
-              style="padding-right: 89px; background-color: #e7f0fe" />
+              class="border-none py-2 px-3 w-full rounded-full task-input focus:outline-none" />
             <button
               type="submit"
               class="absolute top-2 right-2 bg-blue-500 text-white px-5 py-2 rounded-full">
@@ -205,7 +210,11 @@
         >
       </button>
       <p>
-        Welcome to the Todo App! Here you can manage your tasks and
+        Welcome,
+        <span class="text-blue-500 capitalize italic font-semibold">
+          {{ username }}
+        </span>
+        👋, Here you can manage your tasks and
         collections effectively with time tracker.
       </p>
     </div>
@@ -214,6 +223,11 @@
         .getElementById("close-button")
         .addEventListener("click", function () {
           document.getElementById("popup").style.display = "none";
+
+          const welcomeText = document.querySelector(".welcome-text");
+          if (welcomeText) {
+            welcomeText.style.display = "block";
+          }
 
           var xhr = new XMLHttpRequest();
           xhr.open("POST", "/close-popup");
